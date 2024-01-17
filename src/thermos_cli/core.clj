@@ -199,7 +199,7 @@ The different options are those supplied after --retry, so mostly you can use th
     ;; so :retry in the options is the pre-retry options.
     ]
 
-   [nil "--objective OPTION" "Set the optimisation objective - valid options are :system or :network"  :parse-fn keyword]
+   [nil "--objective OPTION" "Set the optimisation objective - valid options are system or network"  :parse-fn keyword]
 
    (setwise-keyword-option nil "--scip-emphasis X" "Overall scip emphasis" lp.scip/emphasis-values)
    (setwise-keyword-option nil "--scip-presolving-emphasis X" "scip presolver emphasis" lp.scip/presolving-emphasis-values)
