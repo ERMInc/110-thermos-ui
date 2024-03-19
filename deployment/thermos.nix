@@ -116,7 +116,6 @@ with lib;
         };
 
         wantedBy = ["multi-user.target"];
-
         script = ''
           export PG_HOST=10.233.1.2
 
@@ -131,7 +130,6 @@ with lib;
           export SMTP_TLS=true
           export SMTP_USER=thermos-project.eu
           # export DEFAULT_USER_AUTH=${cfg.ui.defaultUserAuth}
-
           export LIDAR_DIRECTORY=/thermos-lidar/
 
           # while [[ ! -f /var/keys/smtp ]] ; do
@@ -142,7 +140,6 @@ with lib;
           # export SMTP_PASSWORD=$(cat /var/keys/smtp)
           # export SMTP_FROM_ADDRESS="THERMOS <system@thermos-project.eu>"
           # export WEB_SERVER_DISABLE_CACHE=false
-
           export BASE_URL="${cfg.ui.baseUrl}"
 
 
