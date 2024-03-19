@@ -1,10 +1,10 @@
-{:pg-host "postgres"
+{:pg-host "127.0.0.1"
  :pg-user "postgres"
  :pg-password "therm0s"
  :pg-db "thermos"
  :force-migrate false
  
- :web-server-port 8080
+ :web-server-port 80
  :web-server-max-age 600
  :web-server-max-body 800
  :web-server-enabled true
@@ -16,7 +16,7 @@
  :smtp-user ""
  :smtp-password ""
  :smtp-from-address ""
- :smtp-enabled true
+ :smtp-enabled false
 
  :base-url ""
 

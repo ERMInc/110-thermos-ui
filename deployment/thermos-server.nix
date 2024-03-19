@@ -24,7 +24,7 @@ in
   services.thermos.model.enable = true;
   services.thermos.importer.enable = true;
 
-  services.thermos.ui.baseUrl = "https://tool.thermos-project.eu";
+  services.thermos.ui.baseUrl = "http://ec2-18-132-64-34.eu-west-2.compute.amazonaws.com";
   
   services.nginx = {
     enable = true;
