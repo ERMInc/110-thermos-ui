@@ -2,120 +2,130 @@
 //  * This is the CSS for the help page
 //  */
 
-@blue: #006f94;
+@blue: #0a2b14;
 
 body {
-    background:white;
-    overflow:hidden;
+  background: white;
+  overflow: hidden;
 }
 
-html{ overflow: hidden; }
+html {
+  overflow: hidden;
+}
 
 div#table-of-contents {
-    padding:1em;
-    background: @blue;
+  padding: 1em;
+  background: @blue;
+  color: #fff;
+  height: 100%;
+  overflow: auto;
+  a {
     color: #fff;
-    height:100%;
-    overflow: auto;
-    a {
-        color: #fff;
-        text-decoration:none;
-    }
-    a:hover {
-        text-decoration:underline;
-    }
-    ul {
-        padding-left: 1em;
-    }
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  ul {
+    padding-left: 1em;
+  }
 }
 
 #page-body {
-    flex: 1 1 auto;
-    height: 10px;
-    padding-top:1em;
-    padding-left:1em;
-    padding-right:1em;
+  flex: 1 1 auto;
+  height: 10px;
+  padding-top: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 div#content {
-    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-    padding-left: 16px;
-    padding-right: 16px;
-    color: #333;
-    max-width: 900px;
-    font-size: 16px;
+  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: #333;
+  max-width: 900px;
+  font-size: 16px;
 
-    dl {dt {font-weight:bold; font-size: 1em; color: @blue;}}
-    
-    h2 {
-        color: @blue;
-        margin-top: 0;
-        margin-bottom: 15px;
-        font-size: 36px;
-        font-weight: normal;
+  dl {
+    dt {
+      font-weight: bold;
+      font-size: 1em;
+      color: @blue;
     }
-    h3 {
-        margin-top: 10px;
-        margin-bottom: 20px;
-        color: lighten(desaturate(@blue, 10%), 2%);
-        font-size: 22px;
-        font-weight: 600;
-    }
-    h4 {
-        font-size: 20px;
-        color: #666;
-        margin-top: 10px;
-        font-weight: normal;
-    }
-    p {
-        text-align: justify;
-    }
-    ol li {
-        margin-bottom: 10px;
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-    ul li {
-        margin-bottom: 7px;
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
+  }
 
-    svg, img, video, object[type="image/svg+xml"] {
-        max-width: 95%;
+  h2 {
+    color: @blue;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 36px;
+    font-weight: normal;
+  }
+  h3 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: lighten(desaturate(@blue, 10%), 2%);
+    font-size: 22px;
+    font-weight: 600;
+  }
+  h4 {
+    font-size: 20px;
+    color: #666;
+    margin-top: 10px;
+    font-weight: normal;
+  }
+  p {
+    text-align: justify;
+  }
+  ol li {
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0;
     }
-    
-    .ttmap {
-        position:relative;
-        div.t {
-            position: absolute;
-
-            div.b {
-                opacity: 0;
-                z-index:500;
-                background:rgba(0.5,0.5,0.5,0.5);
-                color:white;
-                text-align: center;
-            }
-
-            div.b ~ div {
-                display:none;
-                background:white;
-                color:black;
-                z-index: 1000;
-                box-shadow: 4px 10px 31px -16px rgba(0,0,0,0.75);
-                border: 1px #eee solid;
-            }
-
-            div.b:hover {
-                opacity:1;
-            }
-            div.b:hover ~ div {
-                display:block;
-            }
-        }
+  }
+  ul li {
+    margin-bottom: 7px;
+    &:last-child {
+      margin-bottom: 0;
     }
+  }
 
+  svg,
+  img,
+  video,
+  object[type="image/svg+xml"] {
+    max-width: 95%;
+  }
+
+  .ttmap {
+    position: relative;
+    div.t {
+      position: absolute;
+
+      div.b {
+        opacity: 0;
+        z-index: 500;
+        background: rgba(0.5, 0.5, 0.5, 0.5);
+        color: white;
+        text-align: center;
+      }
+
+      div.b ~ div {
+        display: none;
+        background: white;
+        color: black;
+        z-index: 1000;
+        box-shadow: 4px 10px 31px -16px rgba(0, 0, 0, 0.75);
+        border: 1px #eee solid;
+      }
+
+      div.b:hover {
+        opacity: 1;
+      }
+      div.b:hover ~ div {
+        display: block;
+      }
+    }
+  }
 }

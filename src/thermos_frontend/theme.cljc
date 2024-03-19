@@ -43,8 +43,8 @@
        canvas)))
 
 
-(def blue "#00ACE6")
-(def red "#ED3027")
+(def blue "#0a2b14") ;; Blue is green
+(def red "#20c997") ;; red is teal
 (def white "#ffffff")
 (def light-grey "#bbbbbb")
 (def dark-grey "#555555")
