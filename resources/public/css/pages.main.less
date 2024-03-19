@@ -1,11 +1,13 @@
 /**
  * Base stuff
  */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 html {
-  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
   font-size: 15px;
   color: #555;
 }
@@ -13,18 +15,23 @@ body {
   margin: 0;
   background: #eee;
 }
-body, html {
+body,
+html {
   height: 100vh;
 }
 // Resetting the base stylesheet so we can override later.
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-size: 1.1em;
   font-weight: normal;
   margin: 0;
   display: inline-block;
 }
 
-@primary-blue: #00ace6;
+@primary-blue: #0a2b14;
 
 /**
  * HEADER
@@ -35,7 +42,7 @@ h1, h2, h3, h4, h5 {
   width: 100%;
   height: 50px;
   background: #fff;
-  box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.2);
+  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
   h1 {
     line-height: 50px;
     // margin: 0 20px;
@@ -72,7 +79,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .top-banner {
-  background: #00ace6;
+  background: #0a2b14;
   color: #fff;
   font-size: 20px;
   height: 80px;
@@ -80,23 +87,25 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 20px;
 }
 
-body {counter-reset:section;}
+body {
+  counter-reset: section;
+}
 h1.s:before {
-    counter-increment:section;
-    content: counter(section) ". ";
+  counter-increment: section;
+  content: counter(section) ". ";
 }
 
 .card {
   background: #fff;
   padding: 20px;
-  box-shadow: 0px 1px 2px 2px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.1);
   border-radius: 3px;
   margin-bottom: 20px;
 
   h1 {
-      display:block;
-      font-size:1.5em;
-      color:#000;
+    display: block;
+    font-size: 1.5em;
+    color: #000;
   }
 }
 
@@ -116,14 +125,14 @@ h1.s:before {
   }
   tr:hover {
     td {
-      background: rgba(0,0,0,0.05);
+      background: rgba(0, 0, 0, 0.05);
     }
   }
 }
 
 .button {
   display: inline-block;
-  background: #00ace6;
+  background: #0a2b14;
   height: 30px;
   line-height: 30px;
   padding: 0 20px;
@@ -135,7 +144,7 @@ h1.s:before {
   border: none;
   cursor: pointer;
   &:hover {
-    background: darken(#00ace6, 4%);
+    background: darken(#0a2b14, 4%);
   }
 }
 
@@ -146,7 +155,7 @@ h1.s:before {
 }
 
 .link {
-  color: darken(#00ace6, 8%);
+  color: darken(#0a2b14, 8%);
   text-decoration: none;
   &:hover {
     text-decoration: underline;
@@ -166,7 +175,7 @@ h1.s:before {
   left: 0;
   right: 0;
   background: #fff;
-  box-shadow: 0px 1px 2px 2px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.1);
   border-radius: 3px;
   margin: 0 auto;
   width: 100%;
@@ -207,7 +216,7 @@ h1.s:before {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(50,50,50,0.5);
+  background: rgba(50, 50, 50, 0.5);
 }
 .button--modal-close {
   float: right;
