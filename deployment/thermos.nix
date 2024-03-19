@@ -163,10 +163,10 @@ with lib;
         wantedBy = ["multi-user.target"];
         after = [
           "enable-postgis.service"
-          "keys@smtp.service"
+          # "keys@smtp.service"
         ];
         
-        wants = [ "keys@smtp.service" ];
+        # wants = [ "keys@smtp.service" ];
         requires = ["enable-postgis.service"];
 
         script = ''
@@ -182,18 +182,18 @@ with lib;
           export SMTP_PORT=25
           export SMTP_TLS=true
           export SMTP_USER=thermos-project.eu
-          export DEFAULT_USER_AUTH=${cfg.ui.defaultUserAuth}
+          # export DEFAULT_USER_AUTH=${cfg.ui.defaultUserAuth}
           
           export LIDAR_DIRECTORY=/thermos-lidar/
-          
-          while [[ ! -f /var/keys/smtp ]] ; do 
-            echo "waiting for smtp key"
-            sleep 2
-          done
 
-          export SMTP_PASSWORD=$(cat /var/keys/smtp)
-          export SMTP_FROM_ADDRESS="THERMOS <system@thermos-project.eu>"
-          export WEB_SERVER_DISABLE_CACHE=false
+          # while [[ ! -f /var/keys/smtp ]] ; do
+          #   echo "waiting for smtp key"
+          #   sleep 2
+          # done
+
+          # export SMTP_PASSWORD=$(cat /var/keys/smtp)
+          # export SMTP_FROM_ADDRESS="THERMOS <system@thermos-project.eu>"
+          # export WEB_SERVER_DISABLE_CACHE=false
           export BASE_URL="${cfg.ui.baseUrl}"
 
           exec ${cfg.jre}/bin/java "-XX:OnOutOfMemoryError=${oom-kill "email"} %p" ${cfg.ui.javaArgs} -jar ${cfg.jar}
