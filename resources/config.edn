@@ -18,12 +18,12 @@
  :smtp-from-address ""
  :smtp-enabled false
 
- :base-url ""
+ :base-url "http://ec2-13-41-145-247.eu-west-2.compute.amazonaws.com"
 
  :restart-running-jobs false
 
- :solver-count 10
- :importer-count 4
+ :solver-count 1
+ :importer-count 1
  
  :import-directory "import-work"
  :lidar-directory "lidar"
