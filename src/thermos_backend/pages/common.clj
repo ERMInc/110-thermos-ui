@@ -56,7 +56,7 @@
                       :padding-left :0.5em
                       :padding-right :0.5em
                       :height "50px")}
-       [:a {:href "/"} theme/icon]
+       [:a {:href "/"} [:img {:width 35 :height 35 :src "/ERM_crop.png"}]]
        [:h1 {:style (style :margin-left :1em)} ~title]
        [:span {:style (style :margin-left :auto)}
         [:a {:style (style :margin-left :1em)
