@@ -56,13 +56,12 @@
                       :padding-left :0.5em
                       :padding-right :0.5em
                       :height "50px")}
-       [:a {:href "/"} [:img {:width 35 :height 35 :src "/ERM_crop.png"}]]
+       [:a {:href "/"} theme/icon]
        [:h1 {:style (style :margin-left :1em)} ~title]
        [:span {:style (style :margin-left :auto)}
         [:a {:style (style :margin-left :1em)
              :href "/settings"} "Settings"]
         [:a {:style (style :margin-left :1em) :href "/help"} "Help"]
-        [:a {:target :_forum :style (style :margin-left :1em) :href "https://forum.thermos-project.eu/"} "Forum"]
         [:a {:style (style :margin-left :1em)
              :href "/logout"} "Logout"]
         ]]

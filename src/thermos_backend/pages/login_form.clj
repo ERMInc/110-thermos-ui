@@ -27,7 +27,7 @@
           :width :100%
           :required :required
           :pattern ".{5,}"
-          :title "A name to identify yourself to THERMOS. Must be at least 5 characters long."
+          :title "A name to identify yourself to Heat Network Designer. Must be at least 5 characters long."
           :id :username
           :placeholder "your@email.com"}]]]
       [:div {:style (style :padding :0.5em :flex-grow 1)}
@@ -66,38 +66,12 @@
        ]
       [:p "You can give your email address as your username - if you do, we may use it for:"]
       [:ol
-       [:li "Telling you about changes or maintenance to THERMOS"]
+       [:li "Telling you about changes or maintenance to Heat Network Designer"]
        [:li "Asking you about how you are using the application or why you are interested in it"]]
       [:p "If you do not use your email address, that's fine, but you won't be able to recover your password."]
-      [:p "You can read more about how THERMOS uses your data and the terms under which this is offered "
+      [:p "You can read more about how Heat Network Designer uses your data and the terms under which this is offered "
        [:a {:href "/help/data-protection.html"} "here"] " - by using the service you agree to these terms."]
       
       ]]]
    
-   [:footer.flex-cols {:style (style :margin-top :auto)}
-    [:div {:style (style :width :10em :margin-right :1em)}
-       [:img {:src "/img/european-flag.svg"
-              :style (style :width :100% :height :auto)
-              :alt "The EU flag."}]]
-    [:div
-     [:p {:style {:margin-top 0}} "THERMOS is a tool for designing heat networks."]
-     [:p "For news and information, visit " [:a {:href "http://www.thermos-project.eu/"}
-                                             "the project website."]]
-
-     [:p "This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 723636. Thanks EU!"]
-     [:p "The THERMOS tool is Copyright Centre for Sustainable Energy, 2017-2021."]
-     [:p "If you use this software's source code, documentation, or outputs in your own work, academic or commercial, please include a citation along these lines:"]
-     [:blockquote
-      [:p
-       "This work uses results from the THERMOS (Thermal Energy Resource Modelling and Optimisation System) model."]
-      [:p "THERMOS was an EU Horizon 2020 funded research project (grant agreement No 723636) coordinated by the Centre for Sustainable Energy."
-       [:p "For more information about THERMOS see the THERMOS website at "
-        [:a {:href "https://www.thermos-project.eu"} "https://www.thermos-project.eu"]
-        " or contact CSE "
-        [:a {:href "https://www.cse.org.uk"} "https://www.cse.org.uk"]
-        " / "
-        [:a {:href "mailto:thermos@cse.org.uk"} "thermos@cse.org.uk"]
-        ]]]
-     ]]))
-
-
+   ))

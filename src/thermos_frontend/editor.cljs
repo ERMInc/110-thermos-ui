@@ -309,7 +309,7 @@
            [:h1 "Project"]
            [:ul
             [:li [:a {:href "../../../"} "Back to project"]]
-            [:li [:a {:href "/"} "THERMOS home page"]]
+            [:li [:a {:href "/"} "Heat Network Designer home page"]]
             ]]])
 
        ^{:key :navbar} [navbar *show-menu *is-cooling]

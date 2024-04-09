@@ -37,7 +37,7 @@
                      :margin-right :2em
                      :align-items :center
                      :flex 1}}
-      [:h1 {:style {:margin-right :0.5em}} "THERMOS"]
+      [:h1 {:style {:margin-right :0.5em}} "Heat Network Designer"]
       (if read-only
         [:b @name-text]
         [:input.text-input.main-nav__file-name-input

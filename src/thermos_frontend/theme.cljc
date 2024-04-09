@@ -43,8 +43,10 @@
        canvas)))
 
 
-(def blue "#0a2b14") ;; Blue is green
-(def red "#20c997") ;; red is teal
+(def blue "#00ACE6")
+(def red "#ED3027")
+(def green "#0a2b14") ;; dark green
+(def teal "#20c997") ;; teal
 (def white "#ffffff")
 (def light-grey "#bbbbbb")
 (def dark-grey "#555555")
@@ -81,20 +83,4 @@
    (def blue-dark-grey-stripes
      (create-stripes blue dark-grey 4 8)))
 
-(def icon
-  [:svg {:width 35 :height 35
-         :viewBox "0 0 1 1"}
-   [:path
-    {:d "M 0.15 0.5 A 0.35 0.35 0 0 1 0.85 0.5"
-     :stroke red
-     :fill :transparent
-     :stroke-width 0.25}]
-   [:path
-    {:d "M 0.15 0.5 A 0.35 0.35 0 0 0 0.85 0.5"
-     :stroke blue
-     :fill :transparent
-     :stroke-width 0.25}]
-   [:path
-    {:d "M 0 0.5 l 1 0"
-     :stroke :white
-     :stroke-width 0.06}]])
+(def icon [:img {:width 35 :height 35 :src "/ERM_crop.png"}])
