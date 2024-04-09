@@ -29,7 +29,7 @@
        :read-only read-only
        :has-gurobi (:has-gurobi config)
        :restriction-info restriction-info})
-     [:title (str "THERMOS - " (or name "New network"))]
+     [:title (str "Heat Network Designer - " (or name "New network"))]
      [:meta {:charset "UTF-8"}]
      [:meta {:name :viewport :content "width=device-width, initial-scale=1"}]
      (include-css "/css/editor.css" source-sans-pro)]
