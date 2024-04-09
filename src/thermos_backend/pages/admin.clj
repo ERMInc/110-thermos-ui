@@ -9,7 +9,7 @@
 
 (defn admin-page [users queues]
   (page
-   {:title "THERMOS admin"
+   {:title "Heat Network Designer: admin"
     :js ["/js/admin.js"]}
    [:div.card
     [:details
@@ -59,7 +59,7 @@
 
 (defn job-page [{:keys [id queue-name args state queued updated message progress]}]
   (page
-   {:title (str "THERMOS admin - job " id)}
+   {:title (str "Heat Network Designer: admin - job " id)}
    [:div.card
     [:h1 "Job details for " id]
     [:table
