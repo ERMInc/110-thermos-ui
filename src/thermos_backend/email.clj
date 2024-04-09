@@ -90,7 +90,7 @@
          (every? (comp string? :id) users)]}
   (queue-message
    {:bcc (map :id users)
-    :subject (str "THERMOS: " subject)
+    :subject (str "Heat Network Designer " subject)
     :body (format "%s
 ----
 You are receiving this message because you have an account on THERMOS.

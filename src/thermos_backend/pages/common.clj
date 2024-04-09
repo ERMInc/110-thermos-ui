@@ -31,7 +31,7 @@
   `(str
     (html
      [:head
-      [:title (str "THERMOS: " ~title)]
+      [:title (str "Heat Network Designer: " ~title)]
       (when (and ~set-base
                  *current-uri*
                  (not (.endsWith *current-uri* "/")))
