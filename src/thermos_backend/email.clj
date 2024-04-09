@@ -109,7 +109,7 @@
   (doseq [user-ids (partition-all 50 (filter valid-email (map :id users)))]
     (queue-message
      {:bcc user-ids
-      :subject (str "THERMOS: " subject)
+      :subject (str "Heat Network Designer: " subject)
       :body (format "%s
 ----
 You are receiving this message because you have an account on THERMOS.
