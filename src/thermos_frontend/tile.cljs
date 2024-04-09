@@ -194,8 +194,8 @@
         ;; Line colour
         (set! (.. ctx -strokeStyle)
               (cond
-                (= inclusion :required) theme/red
-                (= inclusion :optional) theme/blue
+                (= inclusion :required) theme/green
+                (= inclusion :optional) theme/teal
                 :else                   theme/white))
 
         ;; Fill
