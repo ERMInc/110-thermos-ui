@@ -140,7 +140,7 @@ with lib;
           # export SMTP_PASSWORD=$(cat /var/keys/smtp)
           # export SMTP_FROM_ADDRESS="THERMOS <system@thermos-project.eu>"
           # export WEB_SERVER_DISABLE_CACHE=false
-
+          export BASE_URL="${cfg.ui.baseUrl}"
 
           exec ${cfg.jre}/bin/java "-XX:OnOutOfMemoryError=${oom-kill "email"} %p" ${cfg.ui.javaArgs} -jar ${cfg.jar}
         '';
