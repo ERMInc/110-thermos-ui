@@ -25,7 +25,7 @@ with lib;
         };
         javaArgs = mkOption {
           type = types.str;
-          default = "-Xmx6g -server";
+          default = "-Xmx8g -server";
         };
         defaultUserAuth = mkOption {
           type = types.str;
@@ -47,7 +47,7 @@ with lib;
         };
         javaArgs = mkOption {
           type = types.str;
-          default = "-Xmx4g -server";
+          default = "-Xmx20g -server";
         };
       };
       importer = {
@@ -194,7 +194,6 @@ with lib;
           # export SMTP_PASSWORD=$(cat /var/keys/smtp)
           # export SMTP_FROM_ADDRESS="THERMOS <system@thermos-project.eu>"
           # export WEB_SERVER_DISABLE_CACHE=false
-          export BASE_URL="${cfg.ui.baseUrl}"
 
           exec ${cfg.jre}/bin/java "-XX:OnOutOfMemoryError=${oom-kill "email"} %p" ${cfg.ui.javaArgs} -jar ${cfg.jar}
         '';
@@ -219,7 +218,13 @@ with lib;
           export WEB_SERVER_ENABLED=false
           export IMPORTER_COUNT=0
           export DEFAULT_USER_AUTH=${cfg.ui.defaultUserAuth}
+          mkdir -p /root/bin
+          export PATH="/root/bin:/run/current-system/sw/bin:$PATH"
+          export GRB_LICENSE_FILE=/root/.gurobi/gurobi.lic
+          echo '#!/bin/sh
 
+          /run/current-system/sw/bin/gurobi_cl Method=3 Threads=14 LogFile="/root/gurobi-logs/gurobi-log-$(date +%Y-%m-%d-%H-%M-%S)" FeasibilityTol=0.001 "$@"' > /root/bin/gurobi_cl
+          chmod +x /root/bin/gurobi_cl
           exec ${cfg.jre}/bin/java "-XX:OnOutOfMemoryError=${oom-kill "problems"} %p" ${cfg.model.javaArgs} -jar ${cfg.jar}
 
         '';
@@ -244,7 +249,6 @@ with lib;
           export WEB_SERVER_ENABLED=false
           export IMPORTER_COUNT=${toString cfg.importer.importerCount}
           export DEFAULT_USER_AUTH=${cfg.ui.defaultUserAuth}
-
           exec ${cfg.jre}/bin/java "-XX:OnOutOfMemoryError=${oom-kill "imports"} %p" ${cfg.importer.javaArgs} -jar ${cfg.jar}
         '';
       };

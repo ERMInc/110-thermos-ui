@@ -12,6 +12,7 @@ let
   enable-postgis = builtins.toFile "enable-postgis.sql"
   "CREATE EXTENSION postgis; CREATE EXTENSION postgis_raster;";
   scip = (pkgs.callPackage ./scip.nix {});
+  gurobi = (pkgs.callPackage ./gurobi.nix {});
 in
 {
   imports = [ ./thermos.nix ];
@@ -23,6 +24,17 @@ in
   services.thermos.ui.enable = true;
   services.thermos.model.enable = true;
   services.thermos.importer.enable = true;
+
+  environment.systemPackages = [
+    pkgs.vim
+    pkgs.ranger
+    pkgs.cron
+    gurobi
+  ];
+  
+  services.cron = {
+    enable = true;
+  };
 
   services.thermos.ui.baseUrl = "http://ec2-13-41-145-247.eu-west-2.compute.amazonaws.com";
   
@@ -68,7 +80,7 @@ in
   };
 
   security.sudo.wheelNeedsPassword = false;
-  
+
   users.motd = ''
     THERMOS demo server
     -------------------
