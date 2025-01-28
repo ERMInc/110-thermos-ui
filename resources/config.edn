@@ -23,7 +23,7 @@
  :restart-running-jobs false
 
  :solver-count 1
- :importer-count 1
+ :importer-count 2
  
  :import-directory "import-work"
  :lidar-directory "lidar"
@@ -36,5 +36,5 @@
  :default-user-auth :basic
  :contact-email "info@thermos-project.eu"
 
- :has-gurobi false
+ :has-gurobi true
  }
