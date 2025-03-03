@@ -87,7 +87,6 @@ with lib;
         fi
         /run/wrappers/bin/su postgres -c "${pg}/bin/psql -d thermos -c \"update jobs set state='failed', message=message || '\n----\nOut of memory!' where state='running' and queue_name='${queue}'\""
       '');
-
     in {
 
       environment.systemPackages = [
@@ -106,8 +105,6 @@ with lib;
           '';
         })
       ];
-
-
 
       systemd.services.thermos-web = mkIf cfg.ui.enable {
         serviceConfig = {
@@ -167,8 +164,9 @@ with lib;
           export PATH="/root/bin:/run/current-system/sw/bin:$PATH"
           export GRB_LICENSE_FILE=/root/gurobi.lic
           echo '#!/bin/sh
-
-          /run/current-system/sw/bin/gurobi_cl Method=3 Threads=3 LogFile="/root/gurobi-logs/gurobi-log-$(date +%Y-%m-%d-%H-%M-%S)" "$@"' > /root/bin/gurobi_cl
+          echo "$@" > /root/parameters.txt
+          
+          /run/current-system/sw/bin/gurobi_cl Method=3 Threads=3 LogFile="/root/gurobi-logs/gurobi-log-$(date +%Y-%m-%d-%H-%M-%S)" "$@" > /root/system.txt 2>&1' > /root/bin/gurobi_cl
           chmod +x /root/bin/gurobi_cl
           exec ${cfg.jre}/bin/java "-XX:OnOutOfMemoryError=${oom-kill "problems"} %p" ${cfg.model.javaArgs} -jar ${cfg.jar}
 
