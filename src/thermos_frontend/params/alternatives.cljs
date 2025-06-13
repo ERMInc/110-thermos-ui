@@ -103,7 +103,7 @@
            :on-change #(swap! *alternatives assoc-in
                               [id ::supply/capex-per-connection] %)}]]
         [:td
-         "¤/p"]
+         "¤/n"]
         ]
        [:tr {:key "opex per connection"}
         [:td "Opex per Connection"]
@@ -114,7 +114,7 @@
            :on-change #(swap! *alternatives assoc-in
                               [id ::supply/opex-per-connection] %)}]]
         [:td
-         "¤/p"]
+         "¤/n"]
         ]
        [:tr
         [:td [:span.has-tt
