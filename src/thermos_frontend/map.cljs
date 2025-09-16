@@ -126,7 +126,7 @@
   "Make a leaflet control when this component is being put on screen"
   [document flow watches map-node component]
   (let [map-node @map-node
-        
+
         edit!  (fn [f & a] (apply state/edit! document f a))
         track! (fn [f & a]
                  (let [watch (apply reagent/track! f a)]
@@ -155,7 +155,7 @@
         connector-layer (connector-layer {:tileSize 256
                                           :minZoom 15
                                           :maxZoom 21})
-        
+
         demand-tool-layer (demand-tool-layer {:tileSize 256
                                               :minZoom 15
                                               :maxZoom 21})
@@ -174,7 +174,7 @@
         density-layer
         (if (document/is-cooling? @document)
           cold-density-layer heat-density-layer)
-        
+
         normal-layers {::view/candidates-layer candidates-layer
                        ::view/heat-density-layer density-layer
                        ::view/labels-layer labels-layer
@@ -190,7 +190,7 @@
                         {"Candidates" candidates-layer
                          (if (document/is-cooling? @document)
                            "Coldmap" "Heatmap")
-                         
+
                          density-layer
                          "Labels" labels-layer
                          })
@@ -267,14 +267,14 @@
              (+ (Math/pow (- (.-lat zz) (.-lat oo)) 2)
                 (Math/pow (- (.-lng zz) (.-lng oo)) 2)))
             ))
-        
+
         ]
 
     (-> (js/ResizeObserver.
          (fn [evt]
            (.invalidateSize map)))
         (.observe map-node))
-    
+
     (track! show-bounding-box!)
     (track! show-map-layers!)
 
@@ -339,7 +339,7 @@
                (let [latln  (o/get e "latlng")
                      hitbox (latlng->jsts-shape latln (pixel-size))
                      hover-candidate (first (spatial/find-intersecting-candidates @document hitbox))]
-                 
+
                  (if hover-candidate
                    (demand-tool/draw-at! nil)
                    (demand-tool/draw-at! (latlng->jsts-point latln))))
@@ -361,7 +361,7 @@
 
                  (demand-tool/is-drawing?)
                  (demand-tool/mouse-clicked!)
-                 
+
                  (= @draw-state :stop-rectangle)
                  (reset! draw-state nil)
 
@@ -449,7 +449,7 @@
        [::spatial/spatial-index ::spatial/update-counter])
 
       ;; the projection above will make this fire a bit less often
-      
+
       (deref)
       (spatial/find-candidates-ids-in-bbox bbox)))
 
@@ -512,7 +512,7 @@
              []
              (keep ::soln/diameter-mm (vals @just-candidates)))))
         ]
-    
+
 
     (reactive-layer/create
      :internal-id "candidates-layer"
@@ -664,19 +664,14 @@
             (list
              {:value [:b (str (count paths) " roads")]
               :key "selected-roads-header"}
-             {:value "Set inclusion"
-              :key "inclusion-roads"
-              :sub-menu [{:value "Required"
-                          :key "required"
-                          :on-select #(set-inclusion! paths :required)}
-
-                         {:value "Optional"
-                          :key "optional"
-                          :on-select #(set-inclusion! paths :optional)}
-
-                         {:value "Forbidden"
-                          :key "forbidden"
-                          :on-select #(set-inclusion! paths :forbidden)}]}
+             {:value [:div "Set inclusion: "
+                      [:select {:on-change #(let [value (-> % .-target .-value keyword)]
+                                              (set-inclusion! paths value))}
+                       [:option {:value ""} "Choose..."]
+                       [:option {:value "required"} "Required"]
+                       [:option {:value "optional"} "Optional"]
+                       [:option {:value "forbidden"} "Forbidden"]]]
+              :key "inclusion-roads"}
              {:value "Edit cost (e)"
               :key "road-cost"
               :on-select #(candidate-editor/show-editor! document paths)}))
@@ -688,37 +683,33 @@
             (list
              {:value [:b (str (count buildings) " buildings")]
               :key "selected-buildings-header"}
-             {:value "Set inclusion (c)"
-              :key "inclusion-buildings"
-              :sub-menu [{:value "Required"
-                          :key "required"
-                          :on-select #(set-inclusion! buildings :required)
-                          }
-                         {:value "Optional"
-                          :key "optional"
-                          :on-select #(set-inclusion! buildings :optional)}
-                         {:value "Forbidden"
-                          :key "forbidden"
-                          :on-select #(set-inclusion! buildings :forbidden)}]}
+             {:value [:div "Set inclusion (c): "
+                      [:select {:on-change #(let [value (-> % .-target .-value keyword)]
+                                              (set-inclusion! buildings value))}
+                       [:option {:value ""} "Choose..."]
+                       [:option {:value "required"} "Required"]
+                       [:option {:value "optional"} "Optional"]
+                       [:option {:value "forbidden"} "Forbidden"]]]
+              :key "inclusion-buildings"}
              {:value "Edit buildings (e)"
               :key "edit-demands"
               :on-select #(candidate-editor/show-editor! document buildings)}
-             {:value "Edit groups"
-              :key "grouping"
-              :sub-menu
-              [{:value "Group buildings (G)"
-                :key "group-buildings"
-                :on-select #(state/fire-event! [:group-selection])}
-               {:value "Ungroup buildings (U)"
-                :key "ungroup-buildings"
-                :on-select #(state/fire-event! [:ungroup-selection])}
-               {:value "Select same group (g)"
-                :key "select-group"
-                :on-select #(state/fire-event! [:group-select-members])}]}
-             
-             
+             {:value [:div "Edit groups: "
+                      [:select {:on-change #(let [action (-> % .-target .-value)]
+                                              (case action
+                                                "group" (state/fire-event! [:group-selection])
+                                                "ungroup" (state/fire-event! [:ungroup-selection])
+                                                "select" (state/fire-event! [:group-select-members])
+                                                nil))}
+                       [:option {:value ""} "Choose..."]
+                       [:option {:value "group"} "Group buildings (G)"]
+                       [:option {:value "ungroup"} "Ungroup buildings (U)"]
+                       [:option {:value "select"} "Select same group (g)"]]]
+              :key "grouping"}
+
+
              {:value [:div.popover-menu__divider] :key "divider-2"}))
-        
+
 
         ~@(list
            (when (seq buildings)
@@ -794,11 +785,11 @@
               :maxX (+ (:east bbox) (/ bbox-width 2))}
 
         candidates-in-bbox-ids (set (spatial/find-candidates-ids-in-bbox @state/state bbox))
-        
+
         keep-constraints #{:required :optional}
         loaded-candidates (::document/candidates @state/state)
-        
-        
+
+
         ]
     ;; Remove all the candidates that we don't want to keep
     (when (< (count candidates-in-bbox-ids)
