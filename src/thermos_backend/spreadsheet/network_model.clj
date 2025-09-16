@@ -26,19 +26,19 @@
     [{:name (str prefix " (principal, ¤)") :key (comp :principal key)}
      {:name (str prefix " (NPV, ¤)") :key (comp :present key)}
      {:name (str prefix " (total, ¤)") :key (comp :total key)}]
-    
+
     :opex
     [{:name (str prefix " (¤/yr)") :key (comp :annual key)}
      {:name (str prefix " (NPV, ¤)") :key (comp :present key)}
      {:name (str prefix " (total, ¤)") :key (comp :total key)}]
-    
+
     :emission
     [{:name (str prefix " (kg/yr)") :key (comp :kg key)}
      {:name (str prefix " (¤/yr)") :key (comp :annual key)}
      {:name (str prefix " (NPV ¤)") :key (comp :present key)}
      {:name (str prefix " (total ¤)") :key (comp :total key)}]
     )
-  
+
   )
 
 (defn candidate-columns [doc]
@@ -88,7 +88,7 @@
               (cost-columns :opex "Revenue" ::solution/heat-revenue)
               (cost-columns :capex "Connection cost" ::solution/connection-capex))
              networked-buildings)
-            
+
             (sheet/add-tab
              "Other buildings"
              (concat
@@ -105,7 +105,7 @@
                         :emission
                         (candidate/text-emissions-labels e)
                         (comp e :emissions ::solution/alternative)))))
-             
+
              non-networked-buildings
              )
 
@@ -137,7 +137,7 @@
 
               [{:name "Pumping kWh" :key ::solution/pumping-kwh}]
               (cost-columns :opex "Pumping cost" ::solution/pumping-cost)
-              
+
               (apply concat
                      (for [e candidate/emissions-types]
                        (cost-columns
@@ -147,7 +147,7 @@
               )
              supply-buildings)
             ))
-      
+
       (sheet/add-tab
        ss "Buildings"
        base-cols
@@ -167,7 +167,7 @@
        {:name "Capacity (kW)" :key :capacity-kw}
        {:name "Losses (kWh/m.yr)" :key :losses-kwh}
        {:name "Pipe cost (¤/m)" :key :pipe}]
-      
+
       (for [[id n] civils]
         {:name (str n " (¤/m)") :key #(get % id)}))
 
@@ -192,7 +192,7 @@
         {:name "Capacity charge (¤/kWp)" :key (or-zero ::tariff/capacity-charge)}
         {:name "Standing charge (¤)" :key (or-zero ::tariff/standing-charge)}]
        (vals (::document/tariffs doc)))
-      
+
       (sheet/add-tab
        "Connection costs"
        [{:name "Cost name" :key ::tariff/name}
@@ -218,7 +218,7 @@
            :key (comp (partial * (candidate/emissions-factor-scales e))
                       #(e % 0) ::supply/emissions)}
           ))
-       
+
        (vals (::document/alternatives doc)))
 
       (sheet/add-tab
@@ -230,8 +230,8 @@
         {:name "Maximum area %" :key (comp *100 (or-zero ::measure/maximum-area))}
         {:name "Surface" :key (comp name ::measure/surface)}]
        (vals (::document/insulation doc)))
-      
-      
+
+
       (output-pipe-costs doc)
 
       (sheet/add-tab
@@ -243,8 +243,8 @@
         {:name "Rate (%)" :key #(* 100 (:rate (second %) 0))}]
 
        (::document/capital-costs doc))
-      
-      
+
+
       (sheet/add-tab
        "Other parameters"
        [{:name "Parameter" :key first}
@@ -268,7 +268,7 @@
          ~["Default civil cost" (let [pc (-> doc ::document/pipe-costs)
                                       id (:default-civils pc)]
                                   (get (:civils pc) id "none"))]
-         
+
          ~@(for [[e f] (::document/pumping-emissions doc)]
              [(str "Pumping "
                    (candidate/text-emissions-labels e)
@@ -288,17 +288,17 @@
                    :let [{:keys [value enabled]} (get limits e )]]
                [(str (candidate/text-emissions-labels e) " limit")
                 (if enabled value "none")]))
-         
+
          ~["Objective" (name (::document/objective doc))]
          ~["Consider alternative systems" (::document/consider-alternatives doc)]
          ~["Consider insulation" (::document/consider-insulation doc)]
-         
+
          ~["NPV Term" (::document/npv-term doc)]
          ~["NPV Rate" (*100 (::document/npv-rate doc))]
 
          ~["Loan Term" (::document/loan-term doc)]
          ~["Loan Rate" (*100 (::document/loan-rate doc))]
-         
+
          ~["MIP Gap" (::document/mip-gap doc)]
          ~["Param Gap" (::document/param-gap doc)]
          ~["Max runtime" (::document/maximum-runtime doc)]
@@ -312,7 +312,7 @@
                             "unlimited")]
          ]
        )
-      
+
       )
   )
 
@@ -336,30 +336,35 @@
        (cost-columns :capex "Capital cost" ::solution/pipe-capex)
        )))
    (filter candidate/is-path? (vals (::document/candidates doc)))))
-             
+
 (defn output-solution-summary [ss doc]
   (if (document/has-solution? doc)
-    (let [{:keys [rows grand-total]} (solution-summary/data-table doc :total :total)]
+    (let [{:keys [rows grand-total irr]} (solution-summary/data-table doc :total :total)]
       (sheet/add-tab
        ss
        "Network solution summary"
        [{:name "Item" :key :name}
-        {:name "Capital cost (¤)" :key :capex}
+        {:name "Initial Capex (¤)" :key :initial-capex}
+        {:name "Recurring Capex (¤)" :key :recurring-capex}
         {:name "Operating cost (¤)" :key :opex}
         {:name "Operating revenue (¤)" :key :revenue}
         {:name "EC (c/kWh)" :key :equivalized-cost}
-        {:name "NPV (¤)" :key :present}]
+        {:name "NPV (¤)" :key :present}
+        {:name "IRR (%)" :key :irr}]
        (flatten
         (concat
          (for [{:keys [name subcategories total]} rows]
            (concat
             (for [{sub-name :name value :value} subcategories]
               (assoc value :name sub-name))
-            [(assoc total :name name)]
+            [(if (= name "Network")
+               (assoc total :name name :irr (when (:irr (first rows)) (* 100 (:irr (first rows)))))
+               (assoc total :name name))]
             [{}])) ; Add an empty row between categories
-         
+
          [{:name "Whole system"
-           :capex (:capex grand-total)
+           :initial-capex (:initial-capex grand-total)
+           :recurring-capex (:recurring-capex grand-total)
            :opex (:opex grand-total)
            :present (:present grand-total)}]))))
     ss))
@@ -400,7 +405,7 @@
 
         bool-or-num?
         (fn [x] (or (number? x) (boolean? x)))
-        
+
         bool-or-num-to-bool
         (fn [x] (or (and (boolean? x) x)
                     (boolean (not (zero? x)))))
@@ -431,14 +436,14 @@
                      :type    bool-or-num?
                      :convert bool-or-num-to-bool
                      )
-     
+
      (copy-parameter :npv-term ::document/npv-term)
      (copy-parameter :npv-rate ::document/npv-rate
                      :type number? :convert #(/ % 100.0))
      (copy-parameter :loan-term ::document/loan-term)
      (copy-parameter :loan-rate ::document/loan-rate
                      :type number? :convert #(/ % 100.0))
-     
+
      (copy-parameter :mip-gap ::document/mip-gap)
      (copy-parameter :param-gap ::document/param-gap)
      (copy-parameter :max-runtime ::document/maximum-runtime)
@@ -452,7 +457,7 @@
      (copy-parameter :max-supplies ::document/maximum-supply-sites
                      :type number?
                      :convert int)
-     
+
      {::document/capital-costs
       (let [capital-cost-names (set/map-invert capital-cost-names)]
         (->> (for [{:keys [name annualize recur period rate]
@@ -466,14 +471,14 @@
                  :period (int (or period 0))
                  :rate (/ (or rate 0) 100)}])
              (into {})))}
-     
+
      {::document/pumping-emissions
       (->>
        (for [e candidate/emissions-types
              :let [v (get parameters (common/to-keyword (str "pumping-" (name e))))]]
          [e (if (number? v) (/ v (candidate/emissions-factor-scales e)) 0)])
        (into {}))}
-     
+
      {::document/emissions-cost
       (->>
        (for [e candidate/emissions-types
@@ -488,7 +493,7 @@
          [e (if (number? c) {:enabled true :value c} {:enabled false :value nil})])
        (into {}))
       }
-     
+
      {::document/tariffs
       (-> (for [{:keys [tariff-name unit-rate capacity-charge standing-charge]}
                 (:rows tariffs)]
@@ -498,7 +503,7 @@
              :unit-charge (/ unit-rate 100)
              :capacity-charge capacity-charge})
           (common/index ::tariff/id))
-      
+
       ::document/connection-costs
       (-> (for [{:keys [cost-name fixed-cost capacity-cost]}
                 (:rows connection-costs)]
@@ -507,7 +512,7 @@
              :fixed-connection-cost fixed-cost
              :variable-connection-cost capacity-cost})
           (common/index ::tariff/cc-id))
-      
+
       ::document/alternatives
       (-> (for [{:keys [name fixed-cost capacity-cost operating-cost heat-price
                         co2 pm25 nox tank-factor]
@@ -525,7 +530,7 @@
               :pm25 (/ (or pm25 0.0) (candidate/emissions-factor-scales :pm25))
               :nox  (/ (or nox 0.0) (candidate/emissions-factor-scales :nox))}})
           (common/index ::supply/id))
-      
+
       ::document/insulation
       (-> (for [{:keys [name fixed-cost cost-per-m2
                         maximum-reduction-% maximum-area-%
@@ -539,7 +544,7 @@
              :maximum-area (/ maximum-area-% 100.0)
              :surface (keyword surface)})
           (common/index ::measure/id))
-      
+
       ::document/pipe-costs
       (let [civils-keys (-> (:header pipe-costs)
                             (dissoc :nb :capacity :losses :pipe-cost))

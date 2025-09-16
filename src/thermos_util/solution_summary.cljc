@@ -29,11 +29,11 @@
         (->> (mapcat ::solution/insulation insulated)
              (group-by ::measure/name)
              (sort-by first))
-        
+
         supplies (filter candidate/supply-in-solution? buildings)
 
         demands (filter candidate/is-connected? buildings)
-        
+
         {model-mode ::document/mode
          npv-term   ::document/npv-term
          npv-rate   ::document/npv-rate} document
@@ -41,13 +41,21 @@
         sum-cost-outputs
         (fn [& {:keys [capex opex revenue]}]
           (let [tcapex (when capex   (reduce + 0 (keep capex-mode capex)))
+                ;; Split capex into initial and recurring
+                initial-capex (when capex (reduce + 0 (keep :principal capex)))
+                recurring-capex (when capex (reduce + 0 (map #(- (capex-mode %) (or (:principal %) 0)) capex)))
                 topex  (when opex    (reduce + 0 (keep opex-mode opex)))
                 trev   (when revenue (reduce + 0 (keep opex-mode revenue)))
                 tpc    (+ (reduce + 0 (keep :present capex))
                           (reduce + 0 (keep :present opex)))
                 tpv    (reduce + 0 (keep :present revenue))
                 tnpv   (- tpv tpc)]
-            {:capex tcapex :opex topex :revenue trev :present tnpv
+            {:capex tcapex
+             :initial-capex initial-capex
+             :recurring-capex recurring-capex
+             :opex topex
+             :revenue trev
+             :present tnpv
              :present-cost tpc}))
 
         total-demand
@@ -68,6 +76,9 @@
             (* 100
                (/ pv (finance/pv npv-rate (repeat npv-term kwh))))
             nil))
+
+        ;; Calculate IRR early so we can use it in rows
+        project-irr (finance/irr (finance/cash-flows-for-irr document))
 
         rows
         [{:name "Network"
@@ -98,7 +109,8 @@
              :opex (flatten (mapcat (juxt (comp vals ::solution/supply-emissions)
                                           (comp vals ::solution/pumping-emissions)) supplies)))}]
 
-          :kwh (total-demand demands)}
+          :kwh (total-demand demands)
+          :irr project-irr}
 
          {:name "Individual Systems"
           :subcategories

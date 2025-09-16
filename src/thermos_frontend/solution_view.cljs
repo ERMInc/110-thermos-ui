@@ -108,42 +108,52 @@
       [:thead
        [:tr
         [:th "Item"]
-        [:th.numeric "Capital cost (" capex-label ")"]
+        [:th.numeric "Initial Capex (" capex-label ")"]
+        [:th.numeric "Recurring Capex (" capex-label ")"]
         [:th.numeric "Operating cost (" opex-label ")"]
         [:th.numeric "Operating revenue (" opex-label ")"]
         [:th.numeric.has-tt {:title "Levelized cost of heat - this is the present cost (no revenues) divided by the (discounted) heat delivered."} "LCH (c/kWh)"]
-        [:th.numeric "NPV (¤)"]]]
+        [:th.numeric "NPV (¤)"]
+        [:th.numeric "IRR (%)"]]]
 
       [:tbody
-       (for [{:keys [name subcategories total]} (:rows summary)]
+       (for [{:keys [name subcategories total irr]} (:rows summary)]
          [:<> {:key name}
           (for [{sub-name :name values :value} subcategories]
             [:tr {:key sub-name}
              [:th sub-name]
-             [num-td (:capex values)]
+             [num-td (:initial-capex values)]
+             [num-td (:recurring-capex values)]
              [num-td (:opex values)]
              [num-td (:revenue values)]
              [num-td (:equivalized-cost values)]
-             [num-td (:present values)]])
+             [num-td (:present values)]
+             [:td.numeric "--"]])
 
           [:tr.totals-row {:key name}
            [:th name]
-           [num-td (:capex total)]
+           [num-td (:initial-capex total)]
+           [num-td (:recurring-capex total)]
            [num-td (:opex total)]
            [num-td (:revenue total)]
            [num-td (:equivalized-cost total)]
-           [num-td (:present total)]]])
+           [num-td (:present total)]
+           [:td.numeric (if (and (= name "Network") irr)
+                         (str (format/to-fixed (* 100 irr) 1) "%")
+                         "--")]]])
 
        (let [grand-total (:grand-total summary)]
          [:tr.grand-totals-row
           [:th "Whole system"]
-          [num-td (:capex grand-total)]
+          [num-td (:initial-capex grand-total)]
+          [num-td (:recurring-capex grand-total)]
           [num-td (:opex grand-total)]
           [:td.numeric "--"]
           [:td.numeric "--"]
           [:td.numeric.has-tt
            {:title "This does not include network revenues"}
-           (format/si-number (:present grand-total))]])]]]))
+           (format/si-number (:present grand-total))]
+          [:td.numeric "--"]])]]]))
 
 (defn- network-card [{opex-mode :opex-mode
                       capex-mode :capex-mode

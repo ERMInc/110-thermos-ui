@@ -47,6 +47,7 @@
                     (local-format value)))))))
 
 (def seconds util/format-seconds)
+(def to-fixed util/to-fixed)
 (def scale
   {"T" 1000000000000
    "G" 1000000000
